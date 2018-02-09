@@ -27,18 +27,78 @@
 	};
 
 	Greeter.prototype = {
-		fullname = function(){
+		fullname: function(){
 			return this.firstname + ' ' + this.lastname;
 		},
 
-		validate = function(){
+		validate: function(){
 			if (supportedLanguages.indexOf(this.language) === -1){
 				throw this.language +' is not supported !';
 			}
 		},
+
+		greetings: function(){
+			return greetings[this.language] + ' ' + this.firstname;
+		},
+
+		formalGreetings: function(){
+			return formalreetings[this.language] + ' ' + this.fullname();
+		},
+
+		//chanable method
+		greet: function(formal){
+			var msg;
+			
+			//if undefined or null it will be coerced to 'false'
+			if(formal){
+				msg = this.formalGreetings();
+			}
+			else{
+				msg = this.greetings();
+			}
+
+			if(console){
+				console.log(msg);
+			}
+			// make the method chainable
+			return this;
+		},
+
+		log: function(){
+			if(console){
+				console.log(logMessages[this.language] + ': ' + this.fullname());
+			}
+			return this;
+		},
+		setLang: function(lang){
+			this.language = lang;
+
+			this.validate();
+
+			return this;
+		},
+
+		HTMLGreeting: function(selector, formal){
+			if(!$){
+				throw "JQuery not loaded!";
+			}
+			if(!selector){
+				throw "Missing jQuery selector";
+			}
+
+			var msg;
+			if(formal){
+				msg = this.formalGreetings();
+			}
+			else{
+				msg = this.greetings();
+			}
+			$(selector).html(msg);
+			return this;
+		}
 	};
 
-	Greeter.init(firstname, lastname, language){
+	Greeter.init = function(firstname, lastname, language) {
 
 		var self = this;
 		self.firstname = firstname || "";
@@ -50,4 +110,4 @@
 
 	global.Greeter = global.G$ = Greeter;
 
-}(window, jquery));
+}(window, jQuery));
