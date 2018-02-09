@@ -104,6 +104,8 @@
 		self.firstname = firstname || "";
 		self.lastname = lastname || "";
 		self.language = language || "en";
+
+		self.validate();
 	}
 	
 	Greeter.init.prototype = Greeter.prototype;
